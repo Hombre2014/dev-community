@@ -11,5 +11,13 @@ class User < ApplicationRecord
   'Ruby on Rails Developer',
   'Junior Ruby on Rails Developer',
   'Senior React Developer',
+  'Mid-level React Developer',
+  'Front End React Developer',
+  'Back End Ruby Engineer',
+  'Senior Ruby Engineer',
   ].freeze
+
+  def name
+    "#{first_name} #{last_name}".strip
+  end
 end
