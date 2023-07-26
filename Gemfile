@@ -76,3 +76,4 @@ gem "ransack"
 gem "devise"
 gem "kaminari"
 gem "cssbundling-rails"
+gem 'rubocop', require: false
