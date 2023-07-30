@@ -6,23 +6,26 @@ class WorkExperiencesController < ApplicationController
     @work_experience = current_user.work_experiences.new
   end
 
-  def edit; end
+  def edit
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace('remote_modal', partial: 'shared/turbo_modal', locals: { form_partial: 'work_experiences/form', modal_title: 'Edit work experience', work_experience: @work_experience }) }
+    end
+  end
 
   def create
-    @work_experience = current_user.work_experiences.new(params.require(:work_experience).permit(:company_name, :position, :description, :start_date, :end_date))
-    if @work_experience.save
-      redirect_to member_path(current_user), notice: 'Work experience was successfully created.'
-    else
-      render :new
+    @work_experience = current_user.work_experiences.new(work_experience_params)
+    respond_to do |format|
+      if @work_experience.save
+        format.turbo_stream { render turbo_stream: turbo_stream.append('work_experience_items', partial: 'work_experiences/work_experience', locals: { work_experience: @work_experience }) }
+      else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('remote_modal', partial: 'shared/turbo_modal', locals: { form_partial: 'work_experiences/form', modal_title: 'Add new work experience' }) }
+      end
     end
   end
 
   def update; end
 
-  def destroy
-    @work_experience.destroy
-    redirect_to member_path(current_user), notice: 'Work experience was successfully destroyed.'
-  end
+  def destroy; end
 
   private
 
