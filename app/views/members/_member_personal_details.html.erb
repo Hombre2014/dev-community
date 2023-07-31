@@ -5,20 +5,30 @@
     </div>
     <div class="col-lg-8">
       <div class="card-body">
-        <h3 class="fw-bold"><%= user.name  %></h3>
+        <div class="row">
+          <div class="col-lg-10">
+            <div class="d-flex justify-content-start">
+              <h3 class="fw-bold"><%= user.name  %></h3>
+            </div>
+          </div>
+          <% if user_signed_in? && user ==current_user %>
+            <div class="col-lg-2">
+              <div class="d-flex justify-content-end">
+                <%= link_to edit_member_personal_details_path, data: { controller: "bs-modal-form" } do %>
+                  <i class="bi bi-pencil-fill"></i>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
         <p class="lead"><%= user.profile_title %></p>
         <p class="lead text-primary"><%= user.address %></p>
 
-        <% if user_signed_in? && user ==current_user %>
-          <div class="col-lg-6">
-            <div class="d-flex justify-content-end">
-              <%= link_to edit_member_personal_details_path, data: { controller: "bs-modal-form" } do %>
-                <i class="bi bi-pencil-fill"></i>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
+        <div id="user-connection-status">
+          <% if user_signed_in? && current_user.check_if_already_connected?(current_user, user) %>
+            <%= link_to "Connect", connections_path, class: "btn btn-primary" %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

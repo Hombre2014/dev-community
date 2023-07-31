@@ -37,4 +37,8 @@ class User < ApplicationRecord
   def self.ransackable_associations(_auth_object = nil)
     []
   end
+
+  def check_if_already_connected?(current_user, user)
+    current_user != user && !current_user.connections.pluck(:connected_user_id).include?(user.id)
+  end
 end
