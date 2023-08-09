@@ -25,8 +25,16 @@
         <p class="lead text-primary"><%= user.address %></p>
 
         <div id="user-connection-status">
-          <% if user_signed_in? && current_user.check_if_already_connected?(current_user, user) %>
-            <%= link_to "Connect", connections_path, class: "btn btn-primary", data: { controller: "connections", turbo_method: :post, connections_target: "connection", requester_id: current_user.id, connected_id: user.id  } %>
+          <% if user_signed_in? %>
+            <% if current_user.check_if_already_connected?(current_user, user) %>
+              <%= link_to "Connect", connections_path, class: "btn btn-primary", data: { controller: "connections", turbo_method: :post, connections_target: "connection", requester_id: current_user.id, connected_id: user.id  } %>
+            <% elsif current_user.connections.find_by(connected_user_id: user.id).status == 'pending' %>
+              <%= render "connections/create", connector: user %>
+            <% elsif current_user.connections.find_by(connected_user_id: user.id).status == 'accepted' %>
+              <button type="button" class="btn btn-success">Connected</button>
+            <% elsif current_user.connections.find_by(connected_user_id: user.id).status == 'rejected' %>
+              <button type="button" class="btn btn-danger">Rejected</button>
+            <% end %>
           <% end %>
         </div>
       </div>
