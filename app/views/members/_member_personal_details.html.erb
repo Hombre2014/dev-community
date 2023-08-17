@@ -37,6 +37,12 @@
             <% end %>
           <% end %>
         </div>
+
+        <% if @connections.present? %>
+          <div id="connection-count">
+            <%= link_to pluralize(@connections.count, 'connection'), "javascript:void(0)" %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
