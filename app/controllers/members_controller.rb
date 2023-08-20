@@ -6,7 +6,7 @@ class MembersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @connections = Connection.where('user_id = ? OR connected_user_id = ?', params[:id], params[:id]).where(status: 'accepted')
-    @mutual_connections = current_user.connected_user_ids.intersection(@user.connected_user_ids)
+    @mutual_connections = current_user.mutually_connected_ids(@user)
   end
 
   def edit_description; end
@@ -30,9 +30,15 @@ class MembersController < ApplicationController
   end
 
   def connections
-    @requested_connections = Connection.includes(:requested).where(user_id: params[:id], status: 'accepted')
-    @received_connections = Connection.includes(:received).where(connected_user_id: params[:id], status: 'accepted')
-    @total_connections = @requested_connections.count + @received_connections.count
+    @user = User.find(params[:id])
+    @connected_users = if params[:mutual_connections].present?
+                          mutually_connected_ids = current_user.mutually_connected_ids(@user)
+                          User.where(id: mutually_connected_ids)
+                        else
+                          User.where(id: @user.connected_user_ids)
+                        end
+    @connected_users = User.where(id: @user.connected_user_ids)
+    @total_connections = @connected_users.count
   end
 
   private
