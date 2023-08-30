@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class MembersController < ApplicationController
-  before_action :authenticate_user!, only: %i[edit_description update_description edit_personal_details update_personal_details]
-
   def show
     @user = User.find(params[:id])
     @connections = Connection.where('user_id = ? OR connected_user_id = ?', params[:id], params[:id]).where(status: 'accepted')
