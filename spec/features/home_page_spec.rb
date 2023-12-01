@@ -4,8 +4,10 @@ RSpec.feature "HomePages", type: :feature do
   describe "Landing page" do
     it "should show the Login form on root page" do
       visit root_path
+      debugger
       expect(page).to have_text("Dev Community")
       expect(page).to have_text("Login")
+      expect(page).to have_link("Sign In")
       expect(page).to have_link("Sign up")
       expect(page).to have_link("Forgot your password?")
       expect(page).to have_link("Didn't receive confirmation instructions?")
