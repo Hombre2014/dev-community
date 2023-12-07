@@ -65,6 +65,7 @@ RSpec.configure do |config|
 
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include Devise::Test::IntegrationHelpers, type: :feature
 
   Capybara.register_driver :edge do |app|
     Capybara::Selenium::Driver.new(app, browser: :edge, options: options)
